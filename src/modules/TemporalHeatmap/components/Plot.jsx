@@ -82,12 +82,15 @@ const Plot = observer(class Plot extends React.Component {
         const sampleHeatmapScales = this.createSampleHeatMapScales(this.props.heatmapWidth, this.props.visMap.sampleRectWidth);
         const groupScale = this.createGroupScale(this.props.heatmapWidth);
         let transform = "translate(0," + 20 + ")";
-        /*return (
+
+        if(!this.props.store.rootStore.globalTime) {
+
+        return (
             <div className="view">
                 <svg width={this.props.width} height={this.props.height}>
                     <g transform={transform}>
                         <Timepoints {...this.props}
-                                    //allYPositions={this.props.store.rootStore.timeGapStructure}
+                                    allYPositions={this.props.store.rootStore.timeGapStructure}
                                     yPositions={this.props.timepointY}
                                     groupScale={groupScale}
                                     heatmapScales={sampleHeatmapScales}
@@ -111,9 +114,11 @@ const Plot = observer(class Plot extends React.Component {
                 <SankeyTransitionTooltip visibility={this.state.showTooltip} x={this.state.tooltipX}
                                          y={this.state.tooltipY} content={this.state.tooltipContent}/>
             </div>
-        )*/
+        )
 
-        
+    }
+
+    else{
 
         return (
             <div className="view">
@@ -137,7 +142,7 @@ const Plot = observer(class Plot extends React.Component {
             </div>
         )
 
-
+    }   
 
 
     }

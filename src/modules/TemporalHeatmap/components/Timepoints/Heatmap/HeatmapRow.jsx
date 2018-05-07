@@ -14,7 +14,7 @@ const HeatmapRow = observer(class HeatmapRow extends React.Component {
         this.handleMouseUp=this.handleMouseUp.bind(this);
     }
 
-    /*getRow() {
+    getRow() {
         let rects = [];
         const _self = this;
         this.props.row.data.forEach(function (d) {
@@ -29,7 +29,7 @@ const HeatmapRow = observer(class HeatmapRow extends React.Component {
         });
         return rects;
 
-    }*/
+    }
 
 
     //added for drawing lines
@@ -50,48 +50,14 @@ static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
         return (<path key={key+"-dashed"} d={path} stroke={strokeColor} strokeDasharray="5, 5" fill="none"/>)
     }
 }
-/*drawLines4(rects) {
-    let lines = [];
-    const _self = this;
-    
-    rects.forEach(function (d) {
-        /*
-        console.log(d);
 
-        console.log( _self.props.firstHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2);
-
-        console.log(_self.props.secondHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2);
-
-        console.log(0 - _self.props.visMap.gap);
-
-        console.log(_self.props.visMap.transitionSpace);
-        */
-       /* if (_self.props.transition.data.to.includes(d)) {
-            let strokeColor="lightgray";
-            if(_self.props.selectedPatients.includes(d)){
-                strokeColor="black"
-            }
-            lines.push(HeatmapTimepoint.drawLine(_self.props.firstHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2, _self.props.secondHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2, 0 - _self.props.visMap.gap, _self.props.visMap.transitionSpace, d, true, strokeColor));
-        }*/
-
-
-     /*   let strokeColor="lightgray";
-
-
-        lines.push(this.drawLine(_self.props.firstHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2, _self.props.secondHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2, 0 - _self.props.visMap.gap, _self.props.visMap.transitionSpace, d, true, strokeColor));
-
-
-
-    });
-    //return lines;
-}*/
 
 
 //end of drawing lines
 
 
 
-    getRow() {
+    getGlobalRow() {
         let rects = [];
         const _self = this;
         this.props.row.data.forEach(function (d, i) {
@@ -155,9 +121,22 @@ static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
 
 
     render() {
-        return (
-            this.getRow()
-        )
+       // return (
+         //   this.getRow()
+        //)
+
+
+        if(this.props.store.rootStore.globalTime) {
+            return (
+                this.getGlobalRow()
+            )
+        } else {
+            return (
+                this.getRow()
+            )
+        }
+
+
     }
 });
 export default HeatmapRow;

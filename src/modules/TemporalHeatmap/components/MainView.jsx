@@ -125,42 +125,39 @@ const MainView = observer(class MainView extends React.Component {
         const heatmapWidth = this.props.store.numberOfPatients * (rectWidth + 1);
         const svgWidth = heatmapWidth + (this.props.store.maxPartitions - 1) * this.props.visMap.partitionGap + 0.5 * rectWidth;
         const svgHeight = this.props.store.timepoints.length * 2 * ((sampleTPHeight + betweenTPHeight) / 2 + this.props.visMap.transitionSpace);
-        return (
-            <div onClick={this.closeContextMenu} className="heatmapContainer">
-                {this.createTimeButton()} {this.createGlobalTimeButton()}
-                <RowOperators {...this.props} height={svgHeight}
-                              svgHeight={svgHeight} svgWidth={200}
-                              posY={timepointPositions.sample}
-                              openContextMenu={this.openContextMenu}
-                              showSortContextMenu={this.state.showSortContextMenu}
-                              showGroupContextMenu={this.state.showGroupContextMenu}
-                              showPromoteContextMenu={this.state.showPromoteContextMenu}/>
-                <Plot {...this.props} width={svgWidth} height={svgHeight} heatmapWidth={heatmapWidth}
-                      timepointY={timepointPositions.sample}
-                      transY={timepointPositions.between}/>
-                <Legend {...this.props} height={svgHeight}
-                        posY={timepointPositions.sample}/>
-            </div>
-        )
+        
+        if(!this.props.store.rootStore.globalTime){
+            return (
+                <div onClick={this.closeContextMenu} className="heatmapContainer">
+                    {this.createTimeButton()} {this.createGlobalTimeButton()}
+                    <RowOperators {...this.props} height={svgHeight}
+                                svgHeight={svgHeight} svgWidth={200}
+                                posY={timepointPositions.sample}
+                                openContextMenu={this.openContextMenu}
+                                showSortContextMenu={this.state.showSortContextMenu}
+                                showGroupContextMenu={this.state.showGroupContextMenu}
+                                showPromoteContextMenu={this.state.showPromoteContextMenu}/>
+                    <Plot {...this.props} width={svgWidth} height={svgHeight} heatmapWidth={heatmapWidth}
+                        timepointY={timepointPositions.sample}
+                        transY={timepointPositions.between}/>
+                    <Legend {...this.props} height={svgHeight}
+                            posY={timepointPositions.sample}/>
+                </div>
+            )
+        }    
 
-
-        /*return (
-            <div onClick={this.closeContextMenu} className="heatmapContainer">
-                {this.createTimeButton()}
-                <RowOperators {...this.props} height={svgHeight}
-                              svgHeight={svgHeight} svgWidth={200}
-                              posY={timepointPositions.sample}
-                              openContextMenu={this.openContextMenu}
-                              showSortContextMenu={this.state.showSortContextMenu}
-                              showGroupContextMenu={this.state.showGroupContextMenu}
-                              showPromoteContextMenu={this.state.showPromoteContextMenu}/>
-                <Plot {...this.props} width={svgWidth} height={svgHeight} heatmapWidth={heatmapWidth}
-                      timepointY={timepointPositions.sample}
-                      transY={timepointPositions.between}/>
-                   
-                
-            </div>
-        )*/
+        else{
+            return (
+                <div onClick={this.closeContextMenu} className="heatmapContainer">
+                    {this.createGlobalTimeButton()}
+                    <Plot {...this.props} width={svgWidth} height={svgHeight} heatmapWidth={heatmapWidth}
+                        timepointY={timepointPositions.sample}
+                        transY={timepointPositions.between}/>
+                    
+                    
+                </div>
+            )
+    }
 
 
     }

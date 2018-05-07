@@ -9,7 +9,7 @@ creates a heatmap timepoint
 const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component {
 
 
-   /* getTimepoint() {
+    getTimepoint() {
         const _self = this;
         let rows = [];
         let previousYposition = 0;
@@ -41,10 +41,10 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
             }
         });
         return (rows)
-    }*/
+    }
 
 
-    getTimepoint() {
+    getGlobalTimepoint() {
         const _self = this;
         let rows = [];
         let previousYposition = 0;
@@ -96,9 +96,27 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
 
 
     render() {
-        return (
-            this.getTimepoint()
-        )
+       // return (
+         //   this.getTimepoint()
+        //)
+        //
+
+
+
+        if(this.props.store.rootStore.globalTime) {
+            return (
+                this.getGlobalTimepoint()
+            )
+        } else {
+            return (
+                this.getTimepoint()
+            )
+        }
+    
+
+       //
+
+
     }
 });
 export default HeatmapTimepoint;
