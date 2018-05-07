@@ -26,10 +26,12 @@ class RootStore {
         this.patientsPerTimepoint = [];
         this.patientOrderPerTimepoint = [];
         this.timeGapStructure=[];
+        this.actualTimeLine=[];
 
         extendObservable(this, {
             parsed: false,
-            realTime: false
+            realTime: false,
+            globalTime: false
         })
     }
 
@@ -116,6 +118,7 @@ class RootStore {
         });
         const timepointStructure = this.buildTimepointStructure(sampleStructure, maxTP);
         this.timeGapStructure=this.getTimeGap(sampleTimelineMap, timepointStructure, sampleStructure, maxTP);
+        this.actualTimeLine=this.getTimeLine(sampleTimelineMap, timepointStructure, sampleStructure, maxTP);
         this.timepointStore.setNumberOfPatients(allPatients.length);
         this.patientOrderPerTimepoint =allPatients;
         this.patientsPerTimepoint = patientsPerTimepoint;
@@ -173,6 +176,30 @@ class RootStore {
         }
         return timeGaps;
     }
+
+
+    getTimeLine(sampleTimelineMap, timepointStructure, sampleStructure, numberOfTimepoints) {
+        let timeLine = [];
+        for (let i = 0; i < numberOfTimepoints; i++) {
+            let patientSamples3 = [];
+            this.cbioAPI.patients.forEach(function (d, j) {
+                if (sampleStructure[d.patientId].length > i) {
+
+                   // if(i===0){
+                     //   patientSamples2.push({patient: d.patientId, sample: sampleStructure[d.patientId][i][0], timeGapBetweenSample: 0});
+                    //}
+                    //else{
+                        patientSamples3.push( sampleTimelineMap[sampleStructure[d.patientId][i][0]].startNumberOfDaysSinceDiagnosis);
+                    //}
+               }
+            });
+            timeLine.push(patientSamples3);
+        }
+        return timeLine;
+    }
+
+
+
 
 
     /**

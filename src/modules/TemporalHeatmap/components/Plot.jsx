@@ -82,11 +82,12 @@ const Plot = observer(class Plot extends React.Component {
         const sampleHeatmapScales = this.createSampleHeatMapScales(this.props.heatmapWidth, this.props.visMap.sampleRectWidth);
         const groupScale = this.createGroupScale(this.props.heatmapWidth);
         let transform = "translate(0," + 20 + ")";
-        return (
+        /*return (
             <div className="view">
                 <svg width={this.props.width} height={this.props.height}>
                     <g transform={transform}>
                         <Timepoints {...this.props}
+                                    //allYPositions={this.props.store.rootStore.timeGapStructure}
                                     yPositions={this.props.timepointY}
                                     groupScale={groupScale}
                                     heatmapScales={sampleHeatmapScales}
@@ -110,7 +111,35 @@ const Plot = observer(class Plot extends React.Component {
                 <SankeyTransitionTooltip visibility={this.state.showTooltip} x={this.state.tooltipX}
                                          y={this.state.tooltipY} content={this.state.tooltipContent}/>
             </div>
+        )*/
+
+        
+
+        return (
+            <div className="view">
+                <svg width={this.props.width} height={this.props.height}>
+                    <g transform={transform}>
+                        <Timepoints {...this.props}
+                                    allYPositions={this.props.store.rootStore.actualTimeLine}
+                                    yPositions={this.props.timepointY}
+                                    groupScale={groupScale}
+                                    heatmapScales={sampleHeatmapScales}
+                                    onDrag={this.handlePatientSelection}
+                                    selectedPatients={this.state.selectedPatients}/>
+
+
+                   
+
+                    </g>
+                </svg>
+                <SankeyTransitionTooltip visibility={this.state.showTooltip} x={this.state.tooltipX}
+                                         y={this.state.tooltipY} content={this.state.tooltipContent}/>
+            </div>
         )
+
+
+
+
     }
 });
 export default Plot;

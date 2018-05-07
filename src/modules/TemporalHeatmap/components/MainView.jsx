@@ -32,6 +32,14 @@ const MainView = observer(class MainView extends React.Component {
         event.target.className = (this.props.store.rootStore.realTime)? "selected":"notSelected";
     }
 
+
+    handleGlobalTimeClick(event) {
+        this.props.store.rootStore.globalTime=!this.props.store.rootStore.globalTime;
+        event.target.className = (this.props.store.rootStore.globalTime)? "selected":"notSelected";
+    }
+
+
+
     createTimeButton() {
         const _self = this;
         if(this.props.timepoints.length===0) {
@@ -47,6 +55,25 @@ const MainView = observer(class MainView extends React.Component {
             )
         }
     }
+
+
+    createGlobalTimeButton() {
+        const _self = this;
+        if(this.props.timepoints.length===0) {
+            return (<div></div>)
+        } else {
+            return (
+                <div>
+                    <button className={"notSeleced"} onClick={(e) => _self.handleGlobalTimeClick(e)}
+                        key={this.props.store.rootStore.globalTime}>
+                        {(this.props.store.rootStore.globalTime)? "Hide global timeline": "Show global timeline"}
+                    </button>
+                </div>
+            )
+        }
+    }
+
+
     /**
      * set visual parameters
      * @param rectWidth
@@ -100,7 +127,7 @@ const MainView = observer(class MainView extends React.Component {
         const svgHeight = this.props.store.timepoints.length * 2 * ((sampleTPHeight + betweenTPHeight) / 2 + this.props.visMap.transitionSpace);
         return (
             <div onClick={this.closeContextMenu} className="heatmapContainer">
-                {this.createTimeButton()}
+                {this.createTimeButton()} {this.createGlobalTimeButton()}
                 <RowOperators {...this.props} height={svgHeight}
                               svgHeight={svgHeight} svgWidth={200}
                               posY={timepointPositions.sample}
@@ -115,6 +142,27 @@ const MainView = observer(class MainView extends React.Component {
                         posY={timepointPositions.sample}/>
             </div>
         )
+
+
+        /*return (
+            <div onClick={this.closeContextMenu} className="heatmapContainer">
+                {this.createTimeButton()}
+                <RowOperators {...this.props} height={svgHeight}
+                              svgHeight={svgHeight} svgWidth={200}
+                              posY={timepointPositions.sample}
+                              openContextMenu={this.openContextMenu}
+                              showSortContextMenu={this.state.showSortContextMenu}
+                              showGroupContextMenu={this.state.showGroupContextMenu}
+                              showPromoteContextMenu={this.state.showPromoteContextMenu}/>
+                <Plot {...this.props} width={svgWidth} height={svgHeight} heatmapWidth={heatmapWidth}
+                      timepointY={timepointPositions.sample}
+                      transY={timepointPositions.between}/>
+                   
+                
+            </div>
+        )*/
+
+
     }
 });
 MainView.defaultProps = {
