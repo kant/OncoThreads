@@ -31,7 +31,8 @@ class RootStore {
         extendObservable(this, {
             parsed: false,
             realTime: false,
-            globalTime: false
+            globalTime: false,
+            transitionOn: false
         })
     }
 
