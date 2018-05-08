@@ -154,6 +154,7 @@ class BetweenTimepointStore {
      * @param name
      */
     addVariable(type, selectedValues, selectedKey, name) {
+        this.rootStore.transitionOn=true;
         this.addHeatmapVariable(type, selectedValues, selectedKey, name);
         this.currentVariables.push({variable: name, type: "binary"});
         this.rootStore.timepointStore.regroupTimepoints();

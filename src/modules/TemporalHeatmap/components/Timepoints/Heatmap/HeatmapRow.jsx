@@ -45,7 +45,7 @@ static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
         + " " + x1 + "," + y3
         + " " + x1 + "," + y1;
     if(mode) {
-        return (<path key={key+"-solid"} d={path} stroke={strokeColor} fill="none" stroke-width= "22" opacity="0.2"/>)
+        return (<path key={key+"-solid"} d={path} stroke={strokeColor} fill="none" strokeWidth= "22" opacity="0.2"/>)
     } else {
         return (<path key={key+"-dashed"} d={path} stroke={strokeColor} strokeDasharray="5, 5" fill="none"/>)
     }

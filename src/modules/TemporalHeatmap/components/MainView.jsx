@@ -126,9 +126,10 @@ const MainView = observer(class MainView extends React.Component {
         const svgWidth = heatmapWidth + (this.props.store.maxPartitions - 1) * this.props.visMap.partitionGap + 0.5 * rectWidth;
         const svgHeight = this.props.store.timepoints.length * 2 * ((sampleTPHeight + betweenTPHeight) / 2 + this.props.visMap.transitionSpace);
         
-        if(!this.props.store.rootStore.globalTime){
+        if(!this.props.store.rootStore.globalTime && !this.props.store.rootStore.transitionOn){
             return (
                 <div onClick={this.closeContextMenu} className="heatmapContainer">
+
                     {this.createTimeButton()} {this.createGlobalTimeButton()}
                     <RowOperators {...this.props} height={svgHeight}
                                 svgHeight={svgHeight} svgWidth={200}
@@ -146,7 +147,7 @@ const MainView = observer(class MainView extends React.Component {
             )
         }    
 
-        else{
+        else if(this.props.store.rootStore.globalTime && !this.props.store.rootStore.transitionOn){
             return (
                 <div onClick={this.closeContextMenu} className="heatmapContainer">
                     {this.createGlobalTimeButton()}
@@ -157,7 +158,20 @@ const MainView = observer(class MainView extends React.Component {
                     
                 </div>
             )
-    }
+        }
+        else{
+            return (
+                <div onClick={this.closeContextMenu} className="heatmapContainer">
+                    
+                    <Plot {...this.props} width={svgWidth} height={svgHeight} heatmapWidth={heatmapWidth}
+                        timepointY={timepointPositions.sample}
+                        transY={timepointPositions.between}/>
+                    
+                    
+                </div>
+        )
+        }
+
 
 
     }
