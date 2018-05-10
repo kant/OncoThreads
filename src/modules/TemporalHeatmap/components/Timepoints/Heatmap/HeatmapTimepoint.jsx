@@ -53,6 +53,7 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
         this.props.timepoint.forEach(function (row, i) {
             //get the correct color scale depending on the type of the variable (STRING, continous or binary)
             let color = _self.props.visMap.getColorScale("Timeline",_self.props.currentVariables[i].type);
+            //let color = x => { return "#ffd92f" };
             
             const transform = "translate(0," + previousYposition + ")";
 
@@ -94,6 +95,8 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
     }
 
 
+    
+
 
     render() {
        // return (
@@ -103,16 +106,30 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
 
 
 
+        /*if(this.props.store.rootStore.globalTime || this.props.store.rootStore.transitionOn) {
+            return (
+                this.getGlobalTimepoint()
+            )
+        } else {   
+            return (
+                this.getTimepoint()
+            )
+            
+        }
+    */
+
         if(this.props.store.rootStore.globalTime) {
             return (
                 this.getGlobalTimepoint()
             )
-        } else {
+        } else {   
             return (
                 this.getTimepoint()
             )
+            
         }
-    
+
+
 
        //
 

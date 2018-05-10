@@ -126,6 +126,16 @@ static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
         //)
 
 
+        /*if(this.props.store.rootStore.globalTime || this.props.store.rootStore.transitionOn) {
+            return (
+                this.getGlobalRow()
+            )
+        } else {
+            return (
+                this.getRow()
+            )
+        }*/
+
         if(this.props.store.rootStore.globalTime) {
             return (
                 this.getGlobalRow()
@@ -135,6 +145,8 @@ static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
                 this.getRow()
             )
         }
+
+
 
 
     }

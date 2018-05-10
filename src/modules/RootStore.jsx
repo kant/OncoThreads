@@ -27,6 +27,8 @@ class RootStore {
         this.patientOrderPerTimepoint = [];
         this.timeGapStructure=[];
         this.actualTimeLine=[];
+        this.eventDetails=[];
+
 
         extendObservable(this, {
             parsed: false,
@@ -79,6 +81,9 @@ class RootStore {
         const _self = this;
         let sampleStructure = {};
         let sampleTimelineMap = {};
+
+        let sampleEventlineMap={};
+
         let eventCategories = [];
         let maxTP = 0;
         let patientsPerTimepoint = [];

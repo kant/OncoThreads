@@ -52,7 +52,7 @@ class BetweenTimepointStore {
      * @param selectedKey
      * @param name
      */
-    addHeatmapVariable(type, selectedValues, selectedKey, name) {
+    /*addHeatmapVariable(type, selectedValues, selectedKey, name) {
         let timepoints = this.timepoints.slice();
         for (let j = 0; j < this.timepointStructure.length; j++) {
             timepoints[j].heatmap.push({variable: name, sorting: 0, data: []});
@@ -99,7 +99,109 @@ class BetweenTimepointStore {
         });
 
         this.timepoints = timepoints;
+    }*/
+
+
+    addHeatmapVariable(type, selectedValues, selectedKey, name) {
+        let timepoints = this.timepoints.slice();
+        for (let j = 0; j < this.timepointStructure.length; j++) {
+            timepoints[j].heatmap.push({variable: name, sorting: 0, data: []});
+        }
+        const addIndex = timepoints[0].heatmap.length - 1;
+        const _self = this;
+
+        let eventDetails=[];
+        this.patients.forEach(function (f) {
+            let samples = [];
+            _self.timepointStructure.forEach(function (g) {
+                g.forEach(function (l) {
+                    if (l.patient === f) {
+                        samples.push(l.sample);
+                    }
+                });
+            });
+            let currTimepoint = 0;
+            let startAtEvent =0;
+
+            let eventDate=-1;
+
+
+            while (currTimepoint < samples.length) {
+                let eventCounter = startAtEvent;
+                let attributeFound = false;
+                let eventDate=0;
+
+                while (eventCounter < _self.clinicalEvents[f].length) {
+                    let currMaxDate = _self.sampleTimelineMap[samples[currTimepoint]].startNumberOfDaysSinceDiagnosis;
+                    const currEventInRange=BetweenTimepointStore.isInCurrentRange(_self.clinicalEvents[f][eventCounter], currMaxDate);
+                    if (currEventInRange) {
+                        if(_self.doesEventMatch(type, selectedValues, selectedKey, _self.clinicalEvents[f][eventCounter])) {
+                            attributeFound = true;
+                        }
+                        let dt=_self.eventStartDays(type, selectedValues, selectedKey, _self.clinicalEvents[f][eventCounter]);
+                        let dt1=Object.keys(dt);
+                        
+                        if(dt1.length>0) {
+                            //eventDetails.push(dt);
+
+                            eventDate=Object.values(dt)[0].startNumberOfDaysSinceDiagnosis;
+
+                            //console.log(this.eventDate);
+
+                            //eventDetails.push({time: currTimepoint, patientId: f, eventDate: eventDate});
+
+                            //timepoints[currTimepoint].rootStore.eventDetails[currTimepoint].push({time: currTimepoint, eventDate: eventDate})
+
+                        }
+                        else{
+                            //timepoints[currTimepoint].rootStore.eventDetails[currTimepoint].push({time: currTimepoint, eventDate: 0})
+
+                            //eventDetails.push({time: currTimepoint, patientId: f, eventDate: 0});
+                        }
+
+                       
+
+                        if(eventCounter<_self.clinicalEvents[f].length-1) {
+                            const nextEventInRange=BetweenTimepointStore.isInCurrentRange(_self.clinicalEvents[f][eventCounter+1], currMaxDate);
+                            if (!nextEventInRange) {
+                                startAtEvent = eventCounter+1;
+                                break;
+                            }
+                        }
+                    }
+                    eventCounter += 1;
+                }
+
+                if(attributeFound){
+                    eventDetails.push({time: currTimepoint, patientId: f, eventDate: eventDate});
+                }
+                else{
+                    //timepoints[currTimepoint].rootStore.eventDetails[currTimepoint].push({time: currTimepoint, eventDate: 0})
+
+                    eventDetails.push({time: currTimepoint, patientId: f, eventDate: 0});
+                }
+
+                
+
+                timepoints[currTimepoint].heatmap[addIndex].data.push({
+                    "patient": f,
+                    "value": attributeFound,
+                    "eventDate": eventDate
+                });
+
+                eventDate=-1;
+
+                currTimepoint += 1;
+            }
+            console.log(eventDetails);
+        });
+
+        //_self.rootStore.eventDetails.push(eventDetails);
+
+        this.rootStore.eventDetails=eventDetails;
+        this.timepoints = timepoints;
     }
+
     /**
      * checks if an event has happened before a specific date
      * @param event
@@ -143,6 +245,59 @@ class BetweenTimepointStore {
     }
 
 
+    /**
+     * check if an event has a specific attribute (key-value pair) and return the number of days
+     * @param type: type of the event (Status/Treatment/Surgery)
+     * @param values
+     * @param key
+     * @param event
+     * @returns {structure}
+     */
+    eventStartDays(type, values, key, event) {
+
+        let sampleEvents = {};
+
+        let ddate=999;
+
+        let hasAttribute = false;
+        let startDays = -1;
+        if (type === event.eventType) {
+            values.forEach(function (d, i) {
+                event.attributes.forEach(function (f, j) {
+                    if (f.key === key && f.value === d) {
+                        hasAttribute = true;
+                       // startDays = event.startNumberOfDaysSinceDiagnosis;
+
+                       
+
+
+                    }
+                })
+
+                if(hasAttribute){
+                    sampleEvents[event.patientId+event.eventType+event.startNumberOfDaysSinceDiagnosis] = {
+                        "patientId": event.patientId,
+                        "hasAttribute": hasAttribute,
+                        "startNumberOfDaysSinceDiagnosis": event.startNumberOfDaysSinceDiagnosis
+                    };
+                }
+                /*else{
+                    sampleEvents[event.patientId+event.eventType+"-1"] = {
+                        "patientId": event.patientId,
+                        "hasAttribute": hasAttribute,
+                        "startNumberOfDaysSinceDiagnosis": -1
+                    };
+
+                }*/
+              
+                hasAttribute=false;
+
+
+            })
+        }
+        
+        return sampleEvents;
+    }
 
     /**
      * adds variable to sample data
