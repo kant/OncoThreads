@@ -28,7 +28,7 @@ class RootStore {
         this.timeGapStructure=[];
         this.actualTimeLine=[];
         this.eventDetails=[];
-
+        //this.sampleEventList=[];
 
         extendObservable(this, {
             parsed: false,
@@ -51,6 +51,8 @@ class RootStore {
         this.eventAttributes = [];
         this.patientsPerTimepoint = [];
         this.patientOrderPerTimepoint = [];
+
+        //this.sampleEventList=this.betweenTimepointStore.sampleEventList;
 
         this.parsed = false;
     }

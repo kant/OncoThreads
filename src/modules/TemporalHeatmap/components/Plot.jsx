@@ -83,6 +83,10 @@ const Plot = observer(class Plot extends React.Component {
         const groupScale = this.createGroupScale(this.props.heatmapWidth);
         let transform = "translate(0," + 20 + ")";
 
+        const max = this.props.store.rootStore.actualTimeLine
+            .map(yPositions => yPositions.reduce((next, max) => next>max? next: max, 0))
+            .reduce((next, max) => next>max? next: max, 0);
+
         if(!this.props.store.rootStore.globalTime) {
 
         return (
@@ -101,6 +105,7 @@ const Plot = observer(class Plot extends React.Component {
                         <Transitions {...this.props} transitionData={this.props.transitionStore.transitionData}
                                      timepointData={this.props.store.timepoints}
                                      realTime={this.props.store.rootStore.realTime}
+                                     globalTime={this.props.store.rootStore.globalTime}
                                      yPositions={this.props.transY}
                                      groupScale={groupScale}
                                      heatmapScales={sampleHeatmapScales}
@@ -132,7 +137,19 @@ const Plot = observer(class Plot extends React.Component {
                                     onDrag={this.handlePatientSelection}
                                     selectedPatients={this.state.selectedPatients}/>
 
-
+                        <Transitions {...this.props} transitionData={this.props.transitionStore.transitionData}
+                                     timepointData={this.props.store.timepoints}
+                                     realTime={this.props.store.rootStore.realTime}
+                                     globalTime={this.props.store.rootStore.globalTime}
+                                     yPositions={this.props.transY}
+                                     allYPositions={this.props.store.rootStore.actualTimeLine}
+                                     max={max}
+                                     groupScale={groupScale}
+                                     heatmapScales={sampleHeatmapScales}
+                                     height={this.props.transitionSpace}
+                                     selectedPatients={this.state.selectedPatients}
+                                     showTooltip={this.showSankeyTooltip}
+                                     hideTooltip={this.hideSankeyTooltip}/>
                    
 
                     </g>

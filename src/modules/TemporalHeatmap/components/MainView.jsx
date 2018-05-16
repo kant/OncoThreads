@@ -126,7 +126,7 @@ const MainView = observer(class MainView extends React.Component {
         const svgWidth = heatmapWidth + (this.props.store.maxPartitions - 1) * this.props.visMap.partitionGap + 0.5 * rectWidth;
         const svgHeight = this.props.store.timepoints.length * 2 * ((sampleTPHeight + betweenTPHeight) / 2 + this.props.visMap.transitionSpace);
         
-        if(!this.props.store.rootStore.globalTime && !this.props.store.rootStore.transitionOn){
+        if(!this.props.store.rootStore.globalTime ){
             return (
                 <div onClick={this.closeContextMenu} className="heatmapContainer">
 
@@ -147,18 +147,30 @@ const MainView = observer(class MainView extends React.Component {
             )
         }    
 
-        else if(this.props.store.rootStore.globalTime && !this.props.store.rootStore.transitionOn){
+        /*else if(this.props.store.rootStore.globalTime && !this.props.store.rootStore.transitionOn){
             return (
                 <div onClick={this.closeContextMenu} className="heatmapContainer">
                     {this.createGlobalTimeButton()}
+
+                    <RowOperators {...this.props} height={svgHeight}
+                                svgHeight={svgHeight} svgWidth={200}
+                                posY={timepointPositions.sample}
+                                openContextMenu={this.openContextMenu}
+                                showSortContextMenu={this.state.showSortContextMenu}
+                                showGroupContextMenu={this.state.showGroupContextMenu}
+                                showPromoteContextMenu={this.state.showPromoteContextMenu}/>
+
                     <Plot {...this.props} width={svgWidth} height={svgHeight} heatmapWidth={heatmapWidth}
                         timepointY={timepointPositions.sample}
                         transY={timepointPositions.between}/>
+
+                    <Legend {...this.props} height={svgHeight}
+                            posY={timepointPositions.sample}/>    
                     
                     
                 </div>
             )
-        }
+        }*/
         else{
             return (
                 <div onClick={this.closeContextMenu} className="heatmapContainer">

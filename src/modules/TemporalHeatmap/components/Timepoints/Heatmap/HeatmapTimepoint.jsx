@@ -49,13 +49,23 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
         let rows = [];
         let previousYposition = 0;
 
+        let count=0;
+
+        let ypi=_self.props.ypi;
+
         //let color2 =  d3.scaleOrdinal(d3.schemeCategory10); ;
         this.props.timepoint.forEach(function (row, i) {
             //get the correct color scale depending on the type of the variable (STRING, continous or binary)
-            let color = _self.props.visMap.getColorScale("Timeline",_self.props.currentVariables[i].type);
+            //let color = _self.props.visMap.getColorScale("Timeline",_self.props.currentVariables[i].type);
             //let color = x => { return "#ffd92f" };
+
+            let color = _self.props.visMap.getColorScale(row.variable,_self.props.currentVariables[i].type);
+
+            //if(_self.props.store.rootStore.transitionOn)  color = x => { return "#ffd92f" };
             
             const transform = "translate(0," + previousYposition + ")";
+
+            
 
             if (row.variable === _self.props.primaryVariable) {
               rows.push(<g key={row.variable} >
@@ -65,16 +75,29 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
                                 opacity={1}
                                 color={color}
                                 
-                    x={(_self.props.visMap.primaryHeight-_self.props.rectWidth)/2}
-                    ypi={_self.props.ypi}/>;
+                                x={(_self.props.visMap.primaryHeight-_self.props.rectWidth)/2}
+                                ypi={_self.props.ypi}/>;
                    
                 </g>);
 
-                previousYposition += _self.props.visMap.primaryHeight + _self.props.visMap.gap;
+                //previousYposition += _self.props.visMap.primaryHeight + _self.props.visMap.gap;
+
+                //previousYpositions = _self.props.ypi;
 
                 //_self.drawLines4(rows);
+                count++;
+
             }
             else {
+              
+
+              if(count==1){
+                ypi=ypi.map(y=>y+_self.props.rectWidth);
+              }  
+              else{
+                ypi=ypi.map(y=>y+_self.props.rectWidth/2);
+              }  
+
               rows.push(<g key={row.variable} >
             
                     <HeatmapRow {..._self.props} row={row} timepoint={_self.props.index}
@@ -83,10 +106,11 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
                                 color={color}
                                 
                                 x={(_self.props.visMap.primaryHeight-_self.props.rectWidth)/2}
-                                ypi={_self.props.ypi}/>
-                                ;
+                                ypi={ypi}/>;
                 </g>);
                 previousYposition += _self.props.visMap.secondaryHeight + _self.props.visMap.gap;
+
+                count++;
 
                 //_self.drawLines4(rows);
             }
@@ -94,6 +118,81 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
         return (rows)
     }
 
+
+
+    getGlobalTimepointWithTransition() {
+        const _self = this;
+        let rows = [];
+        let previousYposition = 0;
+
+        let count=0;
+
+        let ypi=_self.props.ypi;
+
+        //let color2 =  d3.scaleOrdinal(d3.schemeCategory10); ;
+        this.props.timepoint.forEach(function (row, i) {
+            //get the correct color scale depending on the type of the variable (STRING, continous or binary)
+            //let color = _self.props.visMap.getColorScale("Timeline",_self.props.currentVariables[i].type);
+            //let color = x => { return "#ffd92f" };
+
+            let color = _self.props.visMap.getColorScale(row.variable,_self.props.currentVariables[i].type);
+
+            //if(_self.props.store.rootStore.transitionOn)  color = x => { return "#ffd92f" };
+            
+            const transform = "translate(0," + previousYposition + ")";
+
+            
+
+            if (row.variable === _self.props.primaryVariable) {
+              rows.push(<g key={row.variable} >
+             
+                    <HeatmapRow {..._self.props} row={row} timepoint={_self.props.index}
+                                height={_self.props.visMap.primaryHeight}
+                                opacity={1}
+                                color={color}
+                                eventStartEnd={_self.props.eventStartEnd}
+                                x={(_self.props.visMap.primaryHeight-_self.props.rectWidth)/2}
+                                ypi={_self.props.ypi}/>;
+                   
+                </g>);
+
+                //previousYposition += _self.props.visMap.primaryHeight + _self.props.visMap.gap;
+
+                //previousYpositions = _self.props.ypi;
+
+                //_self.drawLines4(rows);
+                count++;
+
+            }
+            else {
+              
+
+              if(count==1){
+                ypi=ypi.map(y=>y+_self.props.rectWidth);
+              }  
+              else{
+                ypi=ypi.map(y=>y+_self.props.rectWidth/2);
+              }  
+
+              rows.push(<g key={row.variable} >
+            
+                    <HeatmapRow {..._self.props} row={row} timepoint={_self.props.index}
+                                height={_self.props.visMap.secondaryHeight}
+                                opacity={0.5}
+                                color={color}
+                                
+                                x={(_self.props.visMap.primaryHeight-_self.props.rectWidth)/2}
+                                ypi={ypi}/>;
+                </g>);
+                previousYposition += _self.props.visMap.secondaryHeight + _self.props.visMap.gap;
+
+                count++;
+
+                //_self.drawLines4(rows);
+            }
+        });
+        return (rows)
+    }
 
     
 
@@ -118,11 +217,18 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
         }
     */
 
-        if(this.props.store.rootStore.globalTime) {
+        if(this.props.store.rootStore.globalTime && !this.props.store.rootStore.transitionOn) {
             return (
                 this.getGlobalTimepoint()
             )
-        } else {   
+        } 
+        
+        else if(this.props.store.rootStore.globalTime && this.props.store.rootStore.transitionOn) {
+            return (
+                this.getGlobalTimepointWithTransition()
+            )
+        } 
+        else {   
             return (
                 this.getTimepoint()
             )

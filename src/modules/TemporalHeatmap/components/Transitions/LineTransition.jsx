@@ -55,11 +55,71 @@ const LineTransition = observer(class LineTransition extends React.Component {
                 if(_self.props.selectedPatients.includes(d)){
                     strokeColor="black"
                 }
-                lines.push(LineTransition.drawLine(_self.props.firstHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2, _self.props.secondHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2, 0 - _self.props.visMap.gap, _self.props.visMap.transitionSpace, d, true, strokeColor));
+                lines.push(LineTransition.drawLine(_self.props.firstHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2, 
+                    _self.props.secondHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2, 
+                    0 - _self.props.visMap.gap, _self.props.visMap.transitionSpace, 
+                    d, true, strokeColor));
             }
         });
         return lines;
     }
+
+
+    drawLinesGlobal() {
+        let lines = [];
+        const _self = this;
+       
+        
+        //const max = /*_self.props.allYPositionsi
+            //.map(yPositions => yPositions.reduce((next, max) => next>max? next: max, 0))
+            //.reduce((next, max) => next>max? next: max, 0);*/
+           // Math.max(..._self.props.allYPositionsi);
+
+
+        let j=0;
+
+        let y1=_self.props.allYPositionsy1.map(y=>y*700.00/_self.props.max);
+
+
+        let y2=_self.props.allYPositionsy2.map(y=>y*700.00/_self.props.max);
+
+
+        this.props.transition.data.from.forEach(function (d, i) {
+            
+            //var yp=_self.props.allYPositionsi.map(y => y*700.0/max);
+            /*
+            console.log(d);
+
+            console.log( _self.props.firstHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2);
+
+            console.log(_self.props.secondHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2);
+
+            console.log(0 - _self.props.visMap.gap);
+
+            console.log(_self.props.visMap.transitionSpace);
+            */
+            if (_self.props.transition.data.to.includes(d)) {
+                let strokeColor="lightgray";
+                if(_self.props.selectedPatients.includes(d)){
+                    strokeColor="black"
+                }
+                lines.push(LineTransition.drawLine(_self.props.firstHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2, 
+                    _self.props.secondHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2, 
+                    //0 - _self.props.visMap.gap, 
+                    y1[i] + _self.props.visMap.sampleRectWidth,
+                    //_self.props.visMap.transitionSpace, 
+                    y2[j], // + _self.props.visMap.sampleRectWidth / 2,
+                    d, true, strokeColor));
+            j++;    
+            }
+        });
+
+        j=0;
+
+        return lines;
+    }
+
+
 
     drawLines3() {
         let lines = [];
@@ -107,8 +167,10 @@ const LineTransition = observer(class LineTransition extends React.Component {
                         <rect
                             x={_self.props.firstHeatmapScale(d)*(1-frac) +_self.props.secondHeatmapScale(d)*(frac) + _self.props.visMap.sampleRectWidth/2-5}
                             y={_self.props.visMap.transitionSpace*timeGapBetweenMap[d]/max-5}
-                            width={10}
-                            height={10}
+                           // width={10}
+                           width={_self.props.visMap.sampleRectWidth/3}
+                           height={_self.props.visMap.sampleRectWidth/3}
+                            //height={10}
                             fill={color}
                         />);
                 }
@@ -130,7 +192,13 @@ const LineTransition = observer(class LineTransition extends React.Component {
             return (
                 this.drawLines3()
             )
-        } else {
+        } 
+        else if(this.props.globalTime){
+            return (
+                this.drawLinesGlobal()
+            )
+        }
+        else {
             return (
                 this.drawLines()
             )

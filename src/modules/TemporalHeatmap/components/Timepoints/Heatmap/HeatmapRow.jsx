@@ -60,6 +60,7 @@ static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
     getGlobalRow() {
         let rects = [];
         const _self = this;
+        let j=0, ind;
         this.props.row.data.forEach(function (d, i) {
             let stroke="none";
             if(_self.props.selectedPatients.includes(d.patient)){
@@ -68,17 +69,83 @@ static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
             if(!_self.props.ypi){
                 console.log(_self.props);
             }
-            rects.push(<rect stroke={stroke}  onMouseEnter={()=>_self.handleMouseEnter(d.patient)} onMouseDown={()=>_self.handleMouseDown(d.patient)} onMouseUp={_self.handleMouseUp} key={d.patient} height={_self.props.height}
+            /*rects.push(<rect stroke={stroke}  onMouseEnter={()=>_self.handleMouseEnter(d.patient)} onMouseDown={()=>_self.handleMouseDown(d.patient)} onMouseUp={_self.handleMouseUp} key={d.patient} height={_self.props.height}
                              width={_self.props.rectWidth}
                              x={_self.props.heatmapScale(d.patient) + _self.props.x}
                              y={_self.props.ypi[i]}
-                             fill={_self.props.color(_self.props.timepoint)} opacity={_self.props.opacity}/>);
+                             fill={_self.props.color(_self.props.timepoint)} 
+                             opacity={_self.props.opacity}/>);*/
+
+
+            if(_self.props.color(d.value)!='#f7f7f7')    {  
+                
+                ind=0;
+
+                var p_num=_self.props.store.rootStore.patientOrderPerTimepoint.indexOf(d.patient);
+                //var maxNum=_self.props.numEventsForEachPatient[i];
+                var maxNum=_self.props.numEventsForEachPatient[p_num];
+
+
+                if(maxNum==0){
+                    console.log("MaxNum is zero!");
+                    console.log(maxNum);
+                }
+
+                while(ind<maxNum){
+
+                    var k = _self.props.eventStartEnd;
+
+                    var heightN=1;
+
+                    k.forEach(function(l){
+                        if(Object.keys(l)==d.patient+d.eventDate) {
+                            //console.log(Object.values(l)[0].endNumberOfDaysSinceDiagnosis-Object.values(l)[0].startNumberOfDaysSinceDiagnosis);
+                            heightN=1+Object.values(l)[0].endNumberOfDaysSinceDiagnosis-Object.values(l)[0].startNumberOfDaysSinceDiagnosis;
+                            //break;
+                        }
+                    })
+                        
+                        
+                    //console.log(heightN);
+
+                    if(heightN==1) {   
+                    rects.push(<rect stroke={stroke}  onMouseEnter={()=>_self.handleMouseEnter(d.patient)} onMouseDown={()=>_self.handleMouseDown(d.patient)} onMouseUp={_self.handleMouseUp} key={d.patient} 
+                                    height={(_self.props.height)}
+                                    width={_self.props.rectWidth}
+                                    x={_self.props.heatmapScale(d.patient) + _self.props.x}
+                                    y={_self.props.ypi[j]}
+                                    fill={_self.props.color(d.value)}
+                                    opacity={_self.props.opacity}/>);  
+
+                    } 
+                    else{
+                        rects.push(<rect stroke={stroke}  onMouseEnter={()=>_self.handleMouseEnter(d.patient)} onMouseDown={()=>_self.handleMouseDown(d.patient)} onMouseUp={_self.handleMouseUp} key={d.patient} 
+                                    height={(_self.props.height + _self.props.height*(heightN/400))}
+                                    width={_self.props.rectWidth}
+                                    x={_self.props.heatmapScale(d.patient) + _self.props.x}
+                                    y={_self.props.ypi[j]}
+                                    fill={_self.props.color(d.value)}
+                                    opacity={_self.props.opacity}/>);  
+
+                    }               
+                                    
+                    j++; 
+
+                    ind++;
+                
+                }
+
+
+            }  
+            
+            ind=0;
+
            /* rects.push(<text x={_self.props.heatmapScale(d.patient) + _self.props.x}
             y={_self.props.ypi[i]} >       
                 {_self.props.timepoint}
             </text>);   */   
             
-            let strokeColor="lightgray";
+            /*let strokeColor="lightgray";
 
             if(i>0){
                 rects.push(HeatmapRow.drawLine(
@@ -88,7 +155,7 @@ static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
                     _self.props.ypi[i] + _self.props.rectWidth/2, 
                     d.patient, true, _self.props.color(_self.props.timepoint)
                 ));
-            }
+            }*/
             
             
         });

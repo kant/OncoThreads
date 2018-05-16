@@ -22,6 +22,7 @@ const Transitions = observer(class Transitions extends React.Component {
             const firstPrimary=_self.getPrimaryWithType(i);
             const secondPrimary=_self.getPrimaryWithType(i+1);
             const transform = "translate(0," + _self.props.yPositions[i] + ")";
+            
             return (<g key={i + "transition"} transform={transform}><Transition transition={d}
                                                                                 index={i}
                                                                                 realTime={_self.props.realTime}
@@ -40,10 +41,58 @@ const Transitions = observer(class Transitions extends React.Component {
         }))
     }
 
+
+    getGlobalTransitions() {
+        const _self = this;
+        return (_self.props.transitionData.map(function (d, i) {
+            const firstPrimary=_self.getPrimaryWithType(i);
+            const secondPrimary=_self.getPrimaryWithType(i+1);
+            //let transform = "translate(0," + _self.props.yPositions[i] + ")";
+            /*if(_self.props.globalTime){
+                transform = "translate(0," + _self.props.allYPositions[i] + ")";
+            }*/
+
+            if(!_self.props.store.rootStore.transitionOn)
+            return (<g key={i + "transition"} ><Transition transition={d}
+                                                                                index={i}
+                                                                                realTime={_self.props.realTime}
+                                                                                globalTime={_self.props.globalTime}
+                                                                                firstTimepoint={_self.props.timepoints[i]}
+                                                                                secondTimepoint={_self.props.timepoints[i + 1]}
+                                                                                firstPrimary={firstPrimary}
+                                                                                secondPrimary={secondPrimary}
+                                                                                groupScale={_self.props.groupScale}
+                                                                                firstHeatmapScale={_self.props.heatmapScales[i]}
+                                                                                secondHeatmapScale={_self.props.heatmapScales[i + 1]}
+                                                                                allYPositionsy1={_self.props.allYPositions[i]}
+                                                                                allYPositionsy2={_self.props.allYPositions[i+1]}
+                                                                                max={_self.props.max}
+                                                                                selectedPatients={_self.props.selectedPatients}
+                                                                                showTooltip={_self.props.showTooltip}
+                                                                                hideTooltip={_self.props.hideTooltip}
+                                                                                visMap={_self.props.visMap}/>
+            </g>);
+            else return null;
+        }))
+    }
+
+
+
     render() {
-        return (
-            this.getTransitions()
-        )
+    
+        if(this.props.store.rootStore.globalTime) {
+            return (
+                this.getGlobalTransitions()
+            )
+        } else {
+
+            return (
+                this.getTransitions()
+            )
+        }
+
+
+
     }
 });
 export default Transitions;
