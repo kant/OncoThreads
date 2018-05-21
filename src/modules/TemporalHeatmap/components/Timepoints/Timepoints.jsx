@@ -133,6 +133,9 @@ const Timepoints = observer(class Timepoints extends React.Component {
         return timepoints;
     }
 
+    comparePatientOrder(order, p, q) {
+        return order.indexOf(p.patientId)<order.indexOf(q.patientId)? -1: 1;
+    }
 
     getTreatmentTimepoints() {
         const _self = this;
@@ -141,9 +144,12 @@ const Timepoints = observer(class Timepoints extends React.Component {
 
         let a=_self.props.store.rootStore.eventDetails;
 
-        let b=a.filter(d=>d.eventDate);
-        let c=b.map(d=>d.eventDate);
+        //let b=a.filter(d=>d.eventDate);
+        //let c=b.map(d=>d.eventDate);
         
+        let b=a.filter(d=>d.eventEndDate);
+        let c=b.map(d=>d.eventEndDate);
+
 
         let max1=Math.max(...c);
 
@@ -170,7 +176,8 @@ const Timepoints = observer(class Timepoints extends React.Component {
             //check the type of the timepoint to get the correct list of currentVariables and the correct width of the heatmap rectangles
             if(_self.props.timepoints[i].type === "between") {
                 rectWidth = _self.props.visMap.betweenRectWidth;
-                let k=a.filter(d=>d.time==Math.floor(i/2));
+                let k=a.filter(d=>d.time===Math.floor(i/2));
+                k.sort((p1, p2) => _self.comparePatientOrder(p, p1, p2));
                 yp=k.map(d=>d.eventDate *700.0 / max);
                 transform= "translate(0, 0)";
 
@@ -184,7 +191,7 @@ const Timepoints = observer(class Timepoints extends React.Component {
                     k.forEach(function(l){
                         //console.log(p);
                         
-                        if(l.patientId==p[i]){
+                        if(l.patientId===p[i]){
                         count++;
                         }
                     })

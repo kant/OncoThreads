@@ -128,7 +128,7 @@ class RootStore {
         this.timeGapStructure=this.getTimeGap(sampleTimelineMap, timepointStructure, sampleStructure, maxTP);
         this.actualTimeLine=this.getTimeLine(sampleTimelineMap, timepointStructure, sampleStructure, maxTP);
         this.timepointStore.setNumberOfPatients(allPatients.length);
-        this.patientOrderPerTimepoint =allPatients;
+        this.patientOrderPerTimepoint = allPatients;
         this.patientsPerTimepoint = patientsPerTimepoint;
 
         this.sampleTimepointStore.setTimepointStructure(timepointStructure);

@@ -77,7 +77,7 @@ static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
                              opacity={_self.props.opacity}/>);*/
 
 
-            if(_self.props.color(d.value)!='#f7f7f7')    {  
+            //if(_self.props.color(d.value)!='#f7f7f7')    {  
                 
                 ind=0;
 
@@ -95,50 +95,98 @@ static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
 
                     var k = _self.props.eventStartEnd;
 
-                    var heightN=1;
+                    var heightN;
 
-                    k.forEach(function(l){
-                        if(Object.keys(l)==d.patient+d.eventDate) {
-                            //console.log(Object.values(l)[0].endNumberOfDaysSinceDiagnosis-Object.values(l)[0].startNumberOfDaysSinceDiagnosis);
-                            heightN=1+Object.values(l)[0].endNumberOfDaysSinceDiagnosis-Object.values(l)[0].startNumberOfDaysSinceDiagnosis;
-                            //break;
-                        }
-                    })
+                  
                         
                         
                     //console.log(heightN);
+                    /*if((_self.props.timepoint%2==0) && (_self.props.store.rootStore.transitionOn)){
+                        //if(heightN==1) {   
 
-                    if(heightN==1) {   
-                    rects.push(<rect stroke={stroke}  onMouseEnter={()=>_self.handleMouseEnter(d.patient)} onMouseDown={()=>_self.handleMouseDown(d.patient)} onMouseUp={_self.handleMouseUp} key={d.patient} 
-                                    height={(_self.props.height)}
-                                    width={_self.props.rectWidth}
-                                    x={_self.props.heatmapScale(d.patient) + _self.props.x}
-                                    y={_self.props.ypi[j]}
-                                    fill={_self.props.color(d.value)}
-                                    opacity={_self.props.opacity}/>);  
+                            k.forEach(function(l){
+                                if(Object.keys(l)==d.patient+d.eventDate) {
+                                    //console.log(Object.values(l)[0].endNumberOfDaysSinceDiagnosis-Object.values(l)[0].startNumberOfDaysSinceDiagnosis);
+                                    heightN=_self.props.height+(Object.values(l)[0].endNumberOfDaysSinceDiagnosis-Object.values(l)[0].startNumberOfDaysSinceDiagnosis)*700 / 1000;
+                                    console.log(heightN);
+                                }
+                            })
 
-                    } 
-                    else{
-                        rects.push(<rect stroke={stroke}  onMouseEnter={()=>_self.handleMouseEnter(d.patient)} onMouseDown={()=>_self.handleMouseDown(d.patient)} onMouseUp={_self.handleMouseUp} key={d.patient} 
-                                    height={(_self.props.height + _self.props.height*(heightN/400))}
-                                    width={_self.props.rectWidth}
-                                    x={_self.props.heatmapScale(d.patient) + _self.props.x}
-                                    y={_self.props.ypi[j]}
-                                    fill={_self.props.color(d.value)}
-                                    opacity={_self.props.opacity}/>);  
 
-                    }               
+                            rects.push(<rect stroke={stroke}  onMouseEnter={()=>_self.handleMouseEnter(d.patient)} onMouseDown={()=>_self.handleMouseDown(d.patient)} onMouseUp={_self.handleMouseUp} key={d.patient} 
+                                        height={heightN}//{_self.props.height}
+                                        width={_self.props.rectWidth}
+                                        x={_self.props.heatmapScale(d.patient) + _self.props.x}
+                                        y={_self.props.ypi[j]}
+                                        fill={_self.props.color(d.value)}
+                                        opacity={_self.props.opacity}/>);  
+
+                        //} 
+                        /*else{
+                            rects.push(<rect stroke={stroke}  onMouseEnter={()=>_self.handleMouseEnter(d.patient)} onMouseDown={()=>_self.handleMouseDown(d.patient)} onMouseUp={_self.handleMouseUp} key={d.patient} 
+                                        //height={(_self.props.height + _self.props.height*(heightN/400))}
+                                        height={heightN}// {_self.props.height}
+                                        width={_self.props.rectWidth}
+                                        x={_self.props.heatmapScale(d.patient) + _self.props.x}
+                                        y={_self.props.ypi[j]}
+                                        fill={_self.props.color(d.value)}
+                                        opacity={_self.props.opacity}/>);  
+
+                        } */
+
+
+                       // j++; 
+
+                        //ind++;
+                    //} 
+
+                    //else{
+                        //if(heightN==1) {   
+                            rects.push(<rect stroke={stroke}  onMouseEnter={()=>_self.handleMouseEnter(d.patient)} onMouseDown={()=>_self.handleMouseDown(d.patient)} onMouseUp={_self.handleMouseUp} key={d.patient} 
+                                        height={_self.props.height}
+                                        width={_self.props.rectWidth}
+                                        x={_self.props.heatmapScale(d.patient) + _self.props.x}
+                                        y={_self.props.ypi[j]}
+                                        fill={_self.props.color(d.value)}
+                                        opacity={_self.props.opacity}/>);  
+
+                       // } 
+                        /*else{
+                            rects.push(<rect stroke={stroke}  onMouseEnter={()=>_self.handleMouseEnter(d.patient)} onMouseDown={()=>_self.handleMouseDown(d.patient)} onMouseUp={_self.handleMouseUp} key={d.patient} 
+                                        //height={(_self.props.height + _self.props.height*(heightN/400))}
+                                        height={_self.props.height}
+                                        width={_self.props.rectWidth}
+                                        x={_self.props.heatmapScale(d.patient) + _self.props.x}
+                                        y={_self.props.ypi[j]}
+                                        fill={_self.props.color(d.value)}
+                                        opacity={_self.props.opacity}/>);  
+
+                        } */
+
+
+                        j++; 
+
+                        ind++;
+
+
+                    //}
+                    
+                    
                                     
-                    j++; 
+                   
 
-                    ind++;
+                    //if(heightN>1){
+                    //_self.props.numEventsForEachPatient[p_num]=_self.props.numEventsForEachPatient[p_num]-1;
+                    //}
                 
                 }
 
+                _self.props.numEventsForEachPatient[p_num]=_self.props.numEventsForEachPatient[p_num]-ind;
+                ind=0;
 
-            }  
+            //}  
             
-            ind=0;
+           
 
            /* rects.push(<text x={_self.props.heatmapScale(d.patient) + _self.props.x}
             y={_self.props.ypi[i]} >       
@@ -159,6 +207,7 @@ static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
             
             
         });
+        j=0;
         return rects;
 
     }

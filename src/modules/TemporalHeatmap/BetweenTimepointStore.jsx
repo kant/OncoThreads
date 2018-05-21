@@ -13,6 +13,7 @@ class BetweenTimepointStore {
         this.timepointStructure = {};
         this.patients = [];
         this.sampleEventList=[];
+        this.patientOrderForEvents=[];
         extendObservable(this, {
             timepoints: [],
             currentVariables: []
@@ -160,6 +161,7 @@ class BetweenTimepointStore {
 
                             //timepoints[currTimepoint].rootStore.eventDetails[currTimepoint].push({time: currTimepoint, eventDate: eventDate})
 
+                            _self.patientOrderForEvents.push(f);
                         }
                         else{
                             //timepoints[currTimepoint].rootStore.eventDetails[currTimepoint].push({time: currTimepoint, eventDate: 0})
