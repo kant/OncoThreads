@@ -179,10 +179,21 @@ const Timepoints = observer(class Timepoints extends React.Component {
 
             var p =_self.props.store.rootStore.patientOrderPerTimepoint;
 
+            var flag=false;
+
+            _self.props.timepoints.forEach(function(d){if(d.type!="between") flag=true;})
+
+
             //check the type of the timepoint to get the correct list of currentVariables and the correct width of the heatmap rectangles
             if(_self.props.timepoints[i].type === "between") {
                 rectWidth = _self.props.visMap.betweenRectWidth;
-                let k=a.filter(d=>d.time===Math.floor(i/2));
+                let k;
+                if(flag){
+                    k=a.filter(d=>d.time===Math.floor(i/2));
+                }
+                else{
+                    k=a.filter(d=>d.time===Math.floor(i));
+                }
                 k.sort((p1, p2) => _self.comparePatientOrder(p, p1, p2));
                 yp=k.map(d=>d.eventDate *700.0 / max);
 
@@ -278,6 +289,7 @@ const Timepoints = observer(class Timepoints extends React.Component {
     render() {
 
         if(this.props.store.rootStore.transitionOn && this.props.store.rootStore.globalTime){
+        //if(this.props.store.rootStore.transitionOn){    
             return (
                 this.getTreatmentTimepoints()
                 //this.getTimepoints()
@@ -288,7 +300,8 @@ const Timepoints = observer(class Timepoints extends React.Component {
             return (
                 this.getGlobalTimepoints()
             )
-        } else {
+        } 
+        else {
             /*if(this.props.store.rootStore.transitionOn){
                 return (
                     this.getTreatmentTimepoints()

@@ -233,6 +233,7 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
         } 
         
         else if(this.props.store.rootStore.globalTime && this.props.store.rootStore.transitionOn) {
+        //else if(this.props.store.rootStore.transitionOn) {    
             return (
                 this.getGlobalTimepointWithTransition()
             )

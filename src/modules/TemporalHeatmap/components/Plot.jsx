@@ -87,7 +87,9 @@ const Plot = observer(class Plot extends React.Component {
             .map(yPositions => yPositions.reduce((next, max) => next>max? next: max, 0))
             .reduce((next, max) => next>max? next: max, 0);
 
-        if(!this.props.store.rootStore.globalTime) {
+        //if(!this.props.store.rootStore.globalTime) {
+
+        if(this.props.store.rootStore.realTime) {
 
         return (
             <div className="view">
