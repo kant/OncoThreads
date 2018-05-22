@@ -28,11 +28,15 @@ const Timepoints = observer(class Timepoints extends React.Component {
                 rectWidth = _self.props.visMap.sampleRectWidth;
             }
             const transform = "translate(0," + _self.props.yPositions[i] + ")";
+
+            var ht=_self.props.timepoints[i].patients.map(d=>_self.props.visMap.primaryHeight);
+
             if (d.heatmap.length > 0) {
                 timepoints.push(<g key={i + "timepoint"} transform={transform}><Timepoint timepoint={d} index={i}
                                                                                           currentVariables={_self.props.store.currentVariables[d.type]}
                                                                                           eventStartEnd={d.rootStore.betweenTimepointStore.sampleEventList}
                                                                                           rectWidth={rectWidth}
+                                                                                          ht={ht}
                                                                                           width={_self.props.heatmapWidth}
                                                                                           store={_self.props.store}
                                                                                           visMap={_self.props.visMap}
@@ -106,6 +110,7 @@ const Timepoints = observer(class Timepoints extends React.Component {
 
             var yp=_self.props.allYPositions[i].map(y => y*700.0/max); //.map(x=>x.timeGapBetweenSample);
             
+            var ht=yp.map(d=>_self.props.visMap.primaryHeight )
 
             if (d.heatmap.length > 0) {
 
@@ -114,6 +119,7 @@ const Timepoints = observer(class Timepoints extends React.Component {
           
                 timepoints.push(<g key={heatmapi + "timepoint" + i} ><Timepoint timepoint={heatmapd} index={heatmapi}
                                                                                           ypi={yp}  
+                                                                                          ht={ht}
                                                                                           numEventsForEachPatient={numEventsForEachPatient}
                                                                                           eventStartEnd={d.rootStore.betweenTimepointStore.sampleEventList}
                                                                                           currentVariables={_self.props.store.currentVariables[heatmapd.type]}
@@ -163,7 +169,7 @@ const Timepoints = observer(class Timepoints extends React.Component {
 
         this.props.timepoints.forEach(function (d, i) {
             let rectWidth;
-            var yp, count;
+            var yp, count, ht;
 
             var transform;
 
@@ -179,6 +185,10 @@ const Timepoints = observer(class Timepoints extends React.Component {
                 let k=a.filter(d=>d.time===Math.floor(i/2));
                 k.sort((p1, p2) => _self.comparePatientOrder(p, p1, p2));
                 yp=k.map(d=>d.eventDate *700.0 / max);
+
+
+                ht= k.map(d=>(d.eventEndDate - d.eventDate)*700/max + _self.props.visMap.primaryHeight );
+
                 transform= "translate(0, 0)";
 
 
@@ -242,6 +252,7 @@ const Timepoints = observer(class Timepoints extends React.Component {
           
                 timepoints.push(<g key={heatmapi + "timepoint" + i} transform={transform}><Timepoint timepoint={heatmapd} index={heatmapi}
                                                                                           ypi={yp} 
+                                                                                          ht={ht}
                                                                                           numEventsForEachPatient={numEventsForEachPatient} 
                                                                                           eventStartEnd={d.rootStore.betweenTimepointStore.sampleEventList}
                                                                                           currentVariables={_self.props.store.currentVariables[heatmapd.type]}
