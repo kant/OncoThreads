@@ -79,12 +79,13 @@ static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
 
             while(ind<maxNum){
 
-                var k = _self.props.eventStartEnd;
+                //var k = _self.props.eventStartEnd;
 
 
-                var height1, opc1;
+                //var height1;
+                var opc1;
 
-                if(typeof(d.eventDate)=='undefined') {
+                if(typeof(d.eventDate)==='undefined') {
                     //console.log("not transition");
                     opc1=_self.props.opacity;
 
@@ -93,10 +94,11 @@ static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
                     opc1=0.6;
                 }
 
-                if(typeof(ht)=='undefined'){
+                if(typeof(ht)==='undefined'){
                     //console.log(d);
 
-                    rects.push(<rect stroke={stroke}  onMouseEnter={()=>_self.handleMouseEnter(d.patient)} onMouseDown={()=>_self.handleMouseDown(d.patient)} onMouseUp={_self.handleMouseUp} key={d.patient} 
+                    rects.push(<rect stroke={stroke}  onMouseEnter={()=>_self.handleMouseEnter(d.patient)} onMouseDown={()=>_self.handleMouseDown(d.patient)} onMouseUp={_self.handleMouseUp} 
+                            key={d.patient + i+ j} 
                             height={_self.props.height}
                             width={_self.props.rectWidth}
                             x={_self.props.heatmapScale(d.patient) + _self.props.x}
@@ -107,7 +109,8 @@ static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
 
                 }
                 else{
-                    rects.push(<rect stroke={stroke}  onMouseEnter={()=>_self.handleMouseEnter(d.patient)} onMouseDown={()=>_self.handleMouseDown(d.patient)} onMouseUp={_self.handleMouseUp} key={d.patient} 
+                    rects.push(<rect stroke={stroke}  onMouseEnter={()=>_self.handleMouseEnter(d.patient)} onMouseDown={()=>_self.handleMouseDown(d.patient)} onMouseUp={_self.handleMouseUp} 
+                            key={d.patient + i + j} 
                             height={ht[j]}//{_self.props.height}
                             width={_self.props.rectWidth}
                             x={_self.props.heatmapScale(d.patient) + _self.props.x}

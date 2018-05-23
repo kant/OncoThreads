@@ -1,4 +1,4 @@
-import * as d3 from 'd3';
+//import * as d3 from 'd3';
 import React from 'react';
 import {observer} from 'mobx-react';
 import HeatmapRow from './HeatmapRow';
@@ -49,11 +49,14 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
     getGlobalTimepoint() {
         const _self = this;
         let rows = [];
-        let previousYposition = 0;
+        let previousYposition=0;
 
         let count=0;
 
+        var globalIndex = 0;
+
         let ypi=_self.props.ypi;
+
 
         //let color2 =  d3.scaleOrdinal(d3.schemeCategory10); ;
         this.props.timepoint.forEach(function (row, i) {
@@ -65,12 +68,12 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
 
             //if(_self.props.store.rootStore.transitionOn)  color = x => { return "#ffd92f" };
             
-            const transform = "translate(0," + previousYposition + ")";
+            //const transform = "translate(0," + previousYposition + ")";
 
             
 
             if (row.variable === _self.props.primaryVariable) {
-              rows.push(<g key={row.variable} >
+              rows.push(<g key={row.variable + i + globalIndex} >
              
                     <HeatmapRow {..._self.props} row={row} timepoint={_self.props.index}
                                 height={_self.props.visMap.primaryHeight}
@@ -94,14 +97,14 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
             else {
               
 
-              if(count==1){
+              if(count===1){
                 ypi=ypi.map(y=>y+_self.props.rectWidth);
               }  
               else{
                 ypi=ypi.map(y=>y+_self.props.rectWidth/2);
               }  
 
-              rows.push(<g key={row.variable} >
+              rows.push(<g key={row.variable  + i + globalIndex} >
             
                     <HeatmapRow {..._self.props} row={row} timepoint={_self.props.index}
                                 height={_self.props.visMap.secondaryHeight}
@@ -112,12 +115,15 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
                                 ypi={ypi}
                                 ht={_self.props.ht}/>;
                 </g>);
-                previousYposition += _self.props.visMap.secondaryHeight + _self.props.visMap.gap;
+
+                previousYposition = previousYposition + _self.props.visMap.secondaryHeight + _self.props.visMap.gap;
 
                 count++;
 
                 //_self.drawLines4(rows);
             }
+
+            globalIndex++;
         });
         return (rows)
     }
@@ -127,12 +133,15 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
     getGlobalTimepointWithTransition() {
         const _self = this;
         let rows = [];
-        let previousYposition = 0;
+        let previousYposition=0;
 
         let count=0;
 
         let ypi=_self.props.ypi;
 
+        var globalIndex = 0;
+
+        
         //let color2 =  d3.scaleOrdinal(d3.schemeCategory10); ;
         this.props.timepoint.forEach(function (row, i) {
             //get the correct color scale depending on the type of the variable (STRING, continous or binary)
@@ -141,17 +150,18 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
 
             let color = _self.props.visMap.getColorScale(row.variable,_self.props.currentVariables[i].type);
 
-            if(row.variable,_self.props.currentVariables[i].type=="binary"){
+            //if(row.variable,_self.props.currentVariables[i].type==="binary"){
+            if(_self.props.currentVariables[i].type==="binary"){    
                 color = x => { return "#ffd92f" };
             }
             //if(_self.props.store.rootStore.transitionOn)  color = x => { return "#ffd92f" };
             
-            const transform = "translate(0," + previousYposition + ")";
+            //const transform = "translate(0," + previousYposition + ")";
 
             
 
             if (row.variable === _self.props.primaryVariable ) {
-              rows.push(<g key={row.variable} >
+              rows.push(<g key={row.variable + i + globalIndex} >
              
                     <HeatmapRow {..._self.props} row={row} timepoint={_self.props.index}
                                 height={_self.props.visMap.primaryHeight}
@@ -170,19 +180,20 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
 
                 //_self.drawLines4(rows);
                 count++;
+                
 
             }
             else {
               
 
-              if(count==1){
+              if(count===1){
                 ypi=ypi.map(y=>y+_self.props.rectWidth);
               }  
               else{
                 ypi=ypi.map(y=>y+_self.props.rectWidth/2);
               }  
 
-              rows.push(<g key={row.variable} >
+              rows.push(<g key={row.variable + i+ globalIndex} >
             
                     <HeatmapRow {..._self.props} row={row} timepoint={_self.props.index}
                                 height={_self.props.visMap.secondaryHeight}
@@ -193,12 +204,16 @@ const HeatmapTimepoint = observer(class HeatmapTimepoint extends React.Component
                                 ypi={ypi}
                                 ht={_self.props.ht}/>;
                 </g>);
-                previousYposition += _self.props.visMap.secondaryHeight + _self.props.visMap.gap;
+                previousYposition = previousYposition + _self.props.visMap.secondaryHeight + _self.props.visMap.gap;
 
                 count++;
 
+                
+
                 //_self.drawLines4(rows);
             }
+
+            globalIndex++;
         });
         return (rows)
     }

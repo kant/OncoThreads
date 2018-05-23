@@ -84,7 +84,7 @@ class RootStore {
         let sampleStructure = {};
         let sampleTimelineMap = {};
 
-        let sampleEventlineMap={};
+        //let sampleEventlineMap={};
 
         let eventCategories = [];
         let maxTP = 0;

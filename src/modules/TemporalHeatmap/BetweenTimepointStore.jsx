@@ -272,10 +272,10 @@ class BetweenTimepointStore {
 
         let sampleEvents = {};
 
-        let ddate=999;
+        //let ddate=999;
 
         let hasAttribute = false;
-        let startDays = -1;
+        //let startDays = -1;
         if (type === event.eventType) {
             values.forEach(function (d, i) {
                 event.attributes.forEach(function (f, j) {

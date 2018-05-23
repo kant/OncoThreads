@@ -15,12 +15,18 @@ const LineTransition = observer(class LineTransition extends React.Component {
      * @param strokeColor
      * @returns Line
      */
+
+     
     static drawLine(x0, x1, y0, y1, key, mode, strokeColor) {
         const curvature = .5;
         const yi = d3.interpolateNumber(y0, y1),
             y2 = yi(curvature),
             y3 = yi(1 - curvature);
 
+        
+
+        //console.log(key);
+            
         let path = "M" + x0 + "," + y0
             + "C" + x0 + "," + y2
             + " " + x1 + "," + y3
@@ -38,7 +44,9 @@ const LineTransition = observer(class LineTransition extends React.Component {
         console.log(this.props.transition.timeGapStructure);
         console.log(this.props.transition.data.from);
         */
-        this.props.transition.data.from.forEach(function (d) {
+        var globalInd=1;
+
+        this.props.transition.data.from.forEach(function (d, i) {
             /*
             console.log(d);
 
@@ -58,7 +66,8 @@ const LineTransition = observer(class LineTransition extends React.Component {
                 lines.push(LineTransition.drawLine(_self.props.firstHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2, 
                     _self.props.secondHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2, 
                     0 - _self.props.visMap.gap, _self.props.visMap.transitionSpace, 
-                    d, true, strokeColor));
+                    d+globalInd+i, true, strokeColor));
+                globalInd++;   
             }
         });
         return lines;
@@ -83,6 +92,8 @@ const LineTransition = observer(class LineTransition extends React.Component {
 
         let y2=_self.props.allYPositionsy2.map(y=>y*700.00/_self.props.max);
 
+
+        var globalInd=2;
 
         this.props.transition.data.from.forEach(function (d, i) {
             
@@ -109,8 +120,9 @@ const LineTransition = observer(class LineTransition extends React.Component {
                     y1[i] + _self.props.visMap.sampleRectWidth,
                     //_self.props.visMap.transitionSpace, 
                     y2[j], // + _self.props.visMap.sampleRectWidth / 2,
-                    d, true, strokeColor));
-            j++;    
+                    d+globalInd+i, true, strokeColor));
+                j++;   
+                globalInd=globalInd+2; 
             }
         });
 
@@ -126,6 +138,8 @@ const LineTransition = observer(class LineTransition extends React.Component {
         const _self = this;
 
         var timeGapBetweenMap = {};
+
+        var globalInd=3;
 
         var max = this.props.transition.timeGapStructure.map(t=> {
             timeGapBetweenMap[t.patient] = t.timeGapBetweenSample;
@@ -153,15 +167,21 @@ const LineTransition = observer(class LineTransition extends React.Component {
                     (_self.props.firstHeatmapScale(d)) + _self.props.visMap.sampleRectWidth / 2, 
                     _self.props.firstHeatmapScale(d)*(1-frac) +_self.props.secondHeatmapScale(d)*(frac) + _self.props.visMap.sampleRectWidth / 2, 
                     0 - _self.props.visMap.gap,
-                    _self.props.visMap.transitionSpace*timeGapBetweenMap[d]/max, d, true, strokeColor
+                    _self.props.visMap.transitionSpace*timeGapBetweenMap[d]/max, d+globalInd+i, true, strokeColor
                 ));
+
+                globalInd++;
+
                 if(timeGapBetweenMap[d]<max) {
                     lines.push(LineTransition.drawLine(
                         _self.props.firstHeatmapScale(d)*(1-frac) +_self.props.secondHeatmapScale(d)*(frac) + _self.props.visMap.sampleRectWidth / 2, 
                         _self.props.secondHeatmapScale(d) + _self.props.visMap.sampleRectWidth / 2, 
                         _self.props.visMap.transitionSpace*frac,
-                        _self.props.visMap.transitionSpace, d, false, strokeColor
+                        _self.props.visMap.transitionSpace, d+globalInd+i, false, strokeColor
                     ));
+
+                    globalInd=globalInd+3;
+
                     const color = getColor(currentRow[ind].value);
                     lines.push(
                         <rect

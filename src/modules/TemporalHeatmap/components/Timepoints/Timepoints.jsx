@@ -13,9 +13,9 @@ const Timepoints = observer(class Timepoints extends React.Component {
 
 
         
-        const max = _self.props.allYPositions
+        /*const max = _self.props.allYPositions
             .map(yPositions => yPositions.reduce((next, max) => next>max? next: max, 0))
-            .reduce((next, max) => next>max? next: max, 0);
+            .reduce((next, max) => next>max? next: max, 0);*/
 
 
         this.props.timepoints.forEach(function (d, i) {
@@ -61,27 +61,22 @@ const Timepoints = observer(class Timepoints extends React.Component {
         let timepoints = [];
 
 
+        let a=_self.props.store.rootStore.eventDetails;
 
+        let b=a.filter(d=>d.eventDate);
+        let c=b.map(d=>d.eventDate);
         
-        /*const max = _self.props.allYPositions
+
+        let max1=Math.max(...c);
+
+
+        let max2 = _self.props.allYPositions
             .map(yPositions => yPositions.reduce((next, max) => next>max? next: max, 0))
-            .reduce((next, max) => next>max? next: max, 0);*/
+            .reduce((next, max) => next>max? next: max, 0);
 
-            let a=_self.props.store.rootStore.eventDetails;
+        const max=Math.max(max1, max2);    
 
-            let b=a.filter(d=>d.eventDate);
-            let c=b.map(d=>d.eventDate);
-            
-    
-            let max1=Math.max(...c);
-    
-    
-            let max2 = _self.props.allYPositions
-                .map(yPositions => yPositions.reduce((next, max) => next>max? next: max, 0))
-                .reduce((next, max) => next>max? next: max, 0);
-    
-            const max=Math.max(max1, max2);    
-
+        var globalIndex=0;
 
         this.props.timepoints.forEach(function (d, i) {
             let rectWidth;
@@ -117,7 +112,7 @@ const Timepoints = observer(class Timepoints extends React.Component {
                 var heatmapd=d;
                 var heatmapi=i;
           
-                timepoints.push(<g key={heatmapi + "timepoint" + i} ><Timepoint timepoint={heatmapd} index={heatmapi}
+                timepoints.push(<g key={heatmapi + "timepoint" + globalIndex} ><Timepoint timepoint={heatmapd} index={heatmapi}
                                                                                           ypi={yp}  
                                                                                           ht={ht}
                                                                                           numEventsForEachPatient={numEventsForEachPatient}
@@ -132,6 +127,7 @@ const Timepoints = observer(class Timepoints extends React.Component {
                                                                                           onDrag={_self.props.onDrag}
                                                                                           selectedPatients={_self.props.selectedPatients}/>
                 </g>);
+                globalIndex++;
             }
 
 
@@ -166,6 +162,7 @@ const Timepoints = observer(class Timepoints extends React.Component {
 
         const max=Math.max(max1, max2);
 
+        var globalIndex=0;
 
         this.props.timepoints.forEach(function (d, i) {
             let rectWidth;
@@ -175,13 +172,13 @@ const Timepoints = observer(class Timepoints extends React.Component {
 
             var numEventsForEachPatient=[];
 
-            var sampleEventLengthForThisTimeLine=[];
+            //var sampleEventLengthForThisTimeLine=[];
 
             var p =_self.props.store.rootStore.patientOrderPerTimepoint;
 
             var flag=false;
 
-            _self.props.timepoints.forEach(function(d){if(d.type!="between") flag=true;})
+            _self.props.timepoints.forEach(function(d){if(d.type!=="between") flag=true;})
 
 
             //check the type of the timepoint to get the correct list of currentVariables and the correct width of the heatmap rectangles
@@ -205,7 +202,8 @@ const Timepoints = observer(class Timepoints extends React.Component {
 
                
 
-                count=0, i=0;
+                count=0;
+                i=0;
                 k=Object.values(k);
 
                 p.forEach(function(d,i){
@@ -261,7 +259,7 @@ const Timepoints = observer(class Timepoints extends React.Component {
                 var heatmapd=d;
                 var heatmapi=i;
           
-                timepoints.push(<g key={heatmapi + "timepoint" + i} transform={transform}><Timepoint timepoint={heatmapd} index={heatmapi}
+                timepoints.push(<g key={heatmapi + "timepoint" + globalIndex} transform={transform}><Timepoint timepoint={heatmapd} index={heatmapi}
                                                                                           ypi={yp} 
                                                                                           ht={ht}
                                                                                           numEventsForEachPatient={numEventsForEachPatient} 
@@ -276,6 +274,8 @@ const Timepoints = observer(class Timepoints extends React.Component {
                                                                                           onDrag={_self.props.onDrag}
                                                                                           selectedPatients={_self.props.selectedPatients}/>
                 </g>);
+
+                globalIndex++;
             }
 
 
