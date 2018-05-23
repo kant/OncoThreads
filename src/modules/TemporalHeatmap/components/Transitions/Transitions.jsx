@@ -92,7 +92,7 @@ const Transitions = observer(class Transitions extends React.Component {
                 
 
                 if(flagSample){
-                    if(i%2==1){
+                    if(i%2===1){
                         globalInd++;
                         trans_ind++;
                         return (<g key={i + "transition"+globalInd} ><Transition transition={d}
@@ -143,6 +143,8 @@ const Transitions = observer(class Transitions extends React.Component {
                 }  
 
             }
+
+            return null;
         }))
     }
 

@@ -99,7 +99,7 @@ const LineTransition = observer(class LineTransition extends React.Component {
 
             var globalInd=2;
 
-            var flag=false;
+            //var flag=false;
 
             this.props.transition.data.from.forEach(function (d, i) {
                 
