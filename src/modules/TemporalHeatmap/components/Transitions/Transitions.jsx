@@ -48,6 +48,13 @@ const Transitions = observer(class Transitions extends React.Component {
     getGlobalTransitions() {
         const _self = this;
         var globalInd=0;
+
+        var trans_ind=-1;
+
+        var flagSample=false;
+
+        _self.props.timepoints.forEach(function(d){if(d.type==="sample") flagSample=true;})
+
         return (_self.props.transitionData.map(function (d, i) {
             const firstPrimary=_self.getPrimaryWithType(i);
             const secondPrimary=_self.getPrimaryWithType(i+1);
@@ -61,6 +68,7 @@ const Transitions = observer(class Transitions extends React.Component {
                 return (<g key={i + "transition"+globalInd} ><Transition transition={d}
                                                                                     index={i}
                                                                                     realTime={_self.props.realTime}
+                                                                                    transitionOn={_self.props.transitionOn}
                                                                                     globalTime={_self.props.globalTime}
                                                                                     firstTimepoint={_self.props.timepoints[i]}
                                                                                     secondTimepoint={_self.props.timepoints[i + 1]}
@@ -79,7 +87,62 @@ const Transitions = observer(class Transitions extends React.Component {
                 </g>);
                 
             }
-            else return null;
+            else {
+
+                
+
+                if(flagSample){
+                    if(i%2==1){
+                        globalInd++;
+                        trans_ind++;
+                        return (<g key={i + "transition"+globalInd} ><Transition transition={d}
+                                                                                        index={i}
+                                                                                        realTime={_self.props.realTime}
+                                                                                        transitionOn={_self.props.transitionOn}
+                                                                                        globalTime={_self.props.globalTime}
+                                                                                        firstTimepoint={_self.props.timepoints[i-1]}
+                                                                                        secondTimepoint={_self.props.timepoints[i ]}
+                                                                                        firstPrimary={firstPrimary}
+                                                                                        secondPrimary={secondPrimary}
+                                                                                        groupScale={_self.props.groupScale}
+                                                                                        firstHeatmapScale={_self.props.heatmapScales[i-1]}
+                                                                                        secondHeatmapScale={_self.props.heatmapScales[i ]}
+                                                                                        allYPositionsy1={_self.props.allYPositions[trans_ind]}
+                                                                                        allYPositionsy2={_self.props.allYPositions[trans_ind+1]}
+                                                                                        max={_self.props.max}
+                                                                                        selectedPatients={_self.props.selectedPatients}
+                                                                                        showTooltip={_self.props.showTooltip}
+                                                                                        hideTooltip={_self.props.hideTooltip}
+                                                                                        visMap={_self.props.visMap}/>
+                    </g>);
+                    }
+                } 
+                else{
+                        globalInd++;
+                        trans_ind++;
+                        return (<g key={i + "transition"+globalInd} ><Transition transition={d}
+                                                                                        index={i}
+                                                                                        realTime={_self.props.realTime}
+                                                                                        transitionOn={_self.props.transitionOn}
+                                                                                        globalTime={_self.props.globalTime}
+                                                                                        firstTimepoint={_self.props.timepoints[i]}
+                                                                                        secondTimepoint={_self.props.timepoints[i+1 ]}
+                                                                                        firstPrimary={firstPrimary}
+                                                                                        secondPrimary={secondPrimary}
+                                                                                        groupScale={_self.props.groupScale}
+                                                                                        firstHeatmapScale={_self.props.heatmapScales[i]}
+                                                                                        secondHeatmapScale={_self.props.heatmapScales[i+1 ]}
+                                                                                        allYPositionsy1={_self.props.allYPositions[trans_ind]}
+                                                                                        allYPositionsy2={_self.props.allYPositions[trans_ind+1]}
+                                                                                        max={_self.props.max}
+                                                                                        selectedPatients={_self.props.selectedPatients}
+                                                                                        showTooltip={_self.props.showTooltip}
+                                                                                        hideTooltip={_self.props.hideTooltip}
+                                                                                        visMap={_self.props.visMap}/>
+                    </g>);
+                }  
+
+            }
         }))
     }
 
